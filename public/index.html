@@ -1,0 +1,60 @@
+<script type="text/javascript" src="jquery.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="jquery.browser.js"></script>
+
+<style>
+    .bullet {
+        width:64px;
+        height:64px;
+        float: left;
+        margin-top: 200px;
+        opacity: 0.5;
+    }
+</style>
+
+<script>
+  var socket = io.connect();
+  var connections = {};
+
+  var createBullet = function() {
+    var e = $('<div class="bullet"></div');
+    e.appendTo($('body'));
+    return e;
+  }
+
+  var updateBullet = function(e) {
+    e.stop(true);
+    e.css({opacity:1});
+    e.animate({opacity:0.5}, 10*1000);
+  }
+
+  socket.on('_connect', function(sessId, handshake) {
+    var b = createBullet();
+    connections[sessId] = {
+        bullet:b,
+        time:new Date
+    };
+
+    var browser = jQuery.uaMatch(handshake.headers['user-agent']).browser;
+    b.addClass(browser);
+    b.css({'backgroundImage':'url(./images/'+browser+'.png)'});
+    updateBullet(b);
+  });
+
+  var destroyBullet = function(e) {
+    e.animate({
+        width:0,
+        height:0
+    }, 5*1000);
+  }
+
+  socket.on('_disconnect', function(sessId) {
+    destroyBullet(connections[sessId].bullet);
+  });
+
+  socket.on('activity', function(sessId, name) {
+    connections[sessId].time = new Date;
+    updateBullet(connections[sessId].bullet);
+  });
+
+</script>

@@ -1,0 +1,18 @@
+{
+  "name": "socket.io-monitor",
+  "description": "Real time monitoring your socket.io activity",
+  "version": "0.1.0",
+  "author": {
+    "name": "Emil Sedgh",
+    "email": "emilsedgh@kde.org",
+    "url": "http://emilsedgh.info"
+  },
+  "main": "./index",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/emilsedgh/socket.io-monitor"
+  },
+  "engines": {
+    "node": ">=0.8.x"
+  }
+}
